@@ -9,8 +9,11 @@ import com.glucode.about_you.about.views.QuestionCardView
 import com.glucode.about_you.databinding.FragmentAboutBinding
 import com.glucode.about_you.mockdata.MockData
 
-class AboutFragment: Fragment() {
+class AboutFragment : Fragment() {
     private lateinit var binding: FragmentAboutBinding
+
+    private val engineerName: String by lazy { arguments?.getString("name") ?: "Unknown " }
+    private val engineer by lazy { MockData.engineers.first { it.name == engineerName } }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,13 +26,19 @@ class AboutFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setProfileCardInfo()
         setUpQuestions()
     }
 
+    private fun setProfileCardInfo() {
+        with(binding.profileCard) {
+            name = engineer.name
+            role = engineer.role
+            quickStats.setStatsDetails(engineer.quickStats)
+        }
+    }
+
     private fun setUpQuestions() {
-        val engineerName = arguments?.getString("name")
-        val engineer = MockData.engineers.first { it.name == engineerName }
 
         engineer.questions.forEach { question ->
             val questionView = QuestionCardView(requireContext())
