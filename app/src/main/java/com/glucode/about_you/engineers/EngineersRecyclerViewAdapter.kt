@@ -14,18 +14,28 @@ class EngineersRecyclerViewAdapter(
     override fun getItemCount() = engineers.count()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EngineerViewHolder {
-        return EngineerViewHolder(ItemEngineerBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return EngineerViewHolder(
+            ItemEngineerBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: EngineerViewHolder, position: Int) {
         holder.bind(engineers[position], onClick)
     }
 
-    inner class EngineerViewHolder(private val binding: ItemEngineerBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class EngineerViewHolder(private val binding: ItemEngineerBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(engineer: Engineer, onClick: (Engineer) -> Unit) {
-            binding.name.text = engineer.name
-            binding.role.text = engineer.role
+            with(binding.profileCard) {
+                name = engineer.name
+                role = engineer.role
+                quickStats.setStatsDetails(engineer.quickStats)
+            }
             binding.root.setOnClickListener {
                 onClick(engineer)
             }
