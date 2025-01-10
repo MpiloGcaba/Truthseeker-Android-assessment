@@ -11,8 +11,12 @@ import com.glucode.about_you.engineers.models.Engineer
 import com.glucode.about_you.mockdata.MockData
 
 class EngineersFragment : Fragment() {
-    private lateinit var binding: FragmentEngineersBinding
 
+    //region Properties
+    private lateinit var binding: FragmentEngineersBinding
+    private var adapter: EngineersRecyclerViewAdapter? = null
+
+    //endregion
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,17 +34,36 @@ class EngineersFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.action_years) {
-            return true
+        when (item.itemId) {
+            R.id.action_years -> {
+                val newList = MockData.engineers.sortedBy { it.quickStats.years }.toMutableList()
+                adapter?.updateData(newList)
+                return true
+            }
+
+            R.id.action_coffees -> {
+                val newList = MockData.engineers.sortedBy { it.quickStats.coffees }.toMutableList()
+                adapter?.updateData(newList)
+                return true
+            }
+
+            R.id.action_bugs -> {
+                val newList = MockData.engineers.sortedBy { it.quickStats.bugs }.toMutableList()
+                adapter?.updateData(newList)
+                return true
+            }
+
+            else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun setUpEngineersList(engineers: List<Engineer>) {
-        binding.list.adapter = EngineersRecyclerViewAdapter(engineers) {
+        adapter = EngineersRecyclerViewAdapter(engineers) {
             goToAbout(it)
         }
-        val dividerItemDecoration = DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
+        binding.list.adapter = adapter
+        val dividerItemDecoration =
+            DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL)
         binding.list.addItemDecoration(dividerItemDecoration)
     }
 
