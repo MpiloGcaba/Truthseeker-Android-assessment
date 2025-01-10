@@ -17,7 +17,7 @@
             android:layout_height="100dp"
 
             android:layout_margin="@dimen/margin_normal"
-            android:src="@drawable/ic_person"
+            tools:src="@drawable/ic_person"
 
             android:focusable="true"
             android:clickable="true"
