@@ -1,5 +1,6 @@
 package com.glucode.about_you.engineers
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -34,13 +35,18 @@ class EngineersRecyclerViewAdapter(
             with(binding.profileCard) {
                 name = engineer.name
                 role = engineer.role
+                setProfileImage(engineer.defaultImageName)
                 quickStats.setStatsDetails(engineer.quickStats)
             }
             binding.root.setOnClickListener {
                 onClick(engineer)
             }
-            //TODO - set profile picture
-//            statusIcon.setDrawable(item.icon)
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateData(newEngineers: List<Engineer>) {
+        engineers = newEngineers
+        notifyDataSetChanged()
     }
 }
