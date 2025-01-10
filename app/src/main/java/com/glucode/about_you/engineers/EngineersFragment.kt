@@ -28,13 +28,14 @@ class EngineersFragment : Fragment() {
     ): View {
         binding = FragmentEngineersBinding.inflate(inflater, container, false)
         setHasOptionsMenu(true)
+        pickImageLauncher = registerImagePicker { uri ->  }
         setUpEngineersList(MockData.engineers)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pickImageLauncher = registerImagePicker { uri ->  }
+
 
 
     }
