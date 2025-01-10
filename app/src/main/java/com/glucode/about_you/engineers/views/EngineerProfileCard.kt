@@ -3,11 +3,13 @@ package com.glucode.about_you.engineers.views
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.cardview.widget.CardView
 import androidx.core.net.toUri
 import com.glucode.about_you.R
 import com.glucode.about_you.databinding.ViewEngineerProfileCardBinding
+import com.glucode.about_you.utils.launcherForImagePicker
 
 class EngineerProfileCard @JvmOverloads constructor(
     context: Context,
@@ -33,11 +35,15 @@ class EngineerProfileCard @JvmOverloads constructor(
 
     val quickStats: QuickStatsCardView = binding.quickStats
 
-    var clickListener: OnClickListener? = null
+    private var imagePickerLauncher: ActivityResultLauncher<String>? = null
     //endregion
 
 
     //region Helper Functions
+    fun setUpImagePickLauncher(launcher: ActivityResultLauncher<String>) {
+        imagePickerLauncher = launcher
+    }
+
     fun setProfileImage(str: String?) {
         if (!str.isNullOrEmpty()) {
             binding.profileImage.setImageURI(str.toUri())
@@ -56,11 +62,9 @@ class EngineerProfileCard @JvmOverloads constructor(
     init {
         radius = resources.getDimension(R.dimen.corner_radius_normal)
         binding.profileImage.setOnClickListener {
-            clickListener?.onClick()
+            imagePickerLauncher?.let {
+                launcherForImagePicker(it)
+            }
         }
-    }
-
-  interface OnClickListener {
-        fun onClick()
     }
 }

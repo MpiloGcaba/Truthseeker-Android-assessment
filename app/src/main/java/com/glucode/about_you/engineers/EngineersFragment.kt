@@ -2,6 +2,7 @@ package com.glucode.about_you.engineers
 
 import android.os.Bundle
 import android.view.*
+import androidx.activity.result.ActivityResultLauncher
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -9,14 +10,17 @@ import com.glucode.about_you.R
 import com.glucode.about_you.databinding.FragmentEngineersBinding
 import com.glucode.about_you.engineers.models.Engineer
 import com.glucode.about_you.mockdata.MockData
+import com.glucode.about_you.utils.registerImagePicker
 
 class EngineersFragment : Fragment() {
 
     //region Properties
     private lateinit var binding: FragmentEngineersBinding
     private var adapter: EngineersRecyclerViewAdapter? = null
-
+    private lateinit var pickImageLauncher: ActivityResultLauncher<String>
     //endregion
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,6 +30,13 @@ class EngineersFragment : Fragment() {
         setHasOptionsMenu(true)
         setUpEngineersList(MockData.engineers)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        pickImageLauncher = registerImagePicker { uri ->  }
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -58,7 +69,7 @@ class EngineersFragment : Fragment() {
     }
 
     private fun setUpEngineersList(engineers: List<Engineer>) {
-        adapter = EngineersRecyclerViewAdapter(engineers) {
+        adapter = EngineersRecyclerViewAdapter(engineers, pickImageLauncher) {
             goToAbout(it)
         }
         binding.list.adapter = adapter

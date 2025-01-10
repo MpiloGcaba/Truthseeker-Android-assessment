@@ -3,12 +3,14 @@ package com.glucode.about_you.engineers
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
 import androidx.recyclerview.widget.RecyclerView
 import com.glucode.about_you.databinding.ItemEngineerBinding
 import com.glucode.about_you.engineers.models.Engineer
 
 class EngineersRecyclerViewAdapter(
     private var engineers: List<Engineer>,
+    private var pickImageLauncher: ActivityResultLauncher<String>,
     private val onClick: (Engineer) -> Unit
 ) : RecyclerView.Adapter<EngineersRecyclerViewAdapter.EngineerViewHolder>() {
 
@@ -25,17 +27,21 @@ class EngineersRecyclerViewAdapter(
     }
 
     override fun onBindViewHolder(holder: EngineerViewHolder, position: Int) {
-        holder.bind(engineers[position], onClick)
+        holder.bind(engineers[position], pickImageLauncher, onClick)
     }
 
     inner class EngineerViewHolder(private val binding: ItemEngineerBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(engineer: Engineer, onClick: (Engineer) -> Unit) {
+        fun bind(
+            engineer: Engineer, pickImageLauncher: ActivityResultLauncher<String>,
+            onClick: (Engineer) -> Unit
+        ) {
             with(binding.profileCard) {
                 name = engineer.name
                 role = engineer.role
                 setProfileImage(engineer.defaultImageName)
+                setUpImagePickLauncher(pickImageLauncher)
                 quickStats.setStatsDetails(engineer.quickStats)
             }
             binding.root.setOnClickListener {

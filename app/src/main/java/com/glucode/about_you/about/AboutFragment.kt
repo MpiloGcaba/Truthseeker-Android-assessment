@@ -44,11 +44,7 @@ class AboutFragment : Fragment() {
                     ?.apply { defaultImageName = uri.toString() }
             }
 
-        binding.profileCard.clickListener = object : EngineerProfileCard.OnClickListener {
-            override fun onClick() {
-                launcherForImagePicker(pickImageLauncher)
-            }
-        }
+        binding.profileCard.setUpImagePickLauncher(pickImageLauncher)
         setProfileCardInfo()
         setUpQuestions()
     }
